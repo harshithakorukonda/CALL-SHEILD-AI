@@ -1,20 +1,96 @@
+from functools import lru_cache
+from pathlib import Path
+
+import joblib
+
+from app.ml.pipeline import HIGH_RISK_THRESHOLD, LOW_RISK_THRESHOLD, SCAM_THRESHOLD
+
 from .redaction_service import redact_sensitive
 from .semantic_analyzer import analyze_transcript
-from .risk_engine import assess_risk
+
+
+MODEL_PATH = Path(__file__).resolve().parents[2] / "models" / "callshield_text_classifier.joblib"
+SCAM_LABEL = "SCAM"
+
+
+class ModelUnavailableError(RuntimeError):
+    pass
+
+
+class ModelInferenceError(RuntimeError):
+    pass
+
+
+@lru_cache(maxsize=1)
+def _load_model_artifact() -> dict:
+    if not MODEL_PATH.is_file():
+        raise ModelUnavailableError(
+            f"Trained classifier artifact not found at {MODEL_PATH}. "
+            "Train it with `python -m app.ml.train` from the backend directory."
+        )
+    try:
+        artifact = joblib.load(MODEL_PATH)
+    except Exception as error:
+        raise ModelUnavailableError(
+            f"Could not load classifier artifact at {MODEL_PATH}: {error}"
+        ) from error
+    if not isinstance(artifact, dict) or not {"model", "classes", "metadata"} <= artifact.keys():
+        raise ModelUnavailableError(
+            f"Classifier artifact at {MODEL_PATH} has an invalid structure. Retrain the model."
+        )
+    if not hasattr(artifact["model"], "predict_proba"):
+        raise ModelUnavailableError(
+            f"Classifier artifact at {MODEL_PATH} cannot provide class probabilities. Retrain the model."
+        )
+    if SCAM_LABEL not in artifact["classes"] or "LEGITIMATE" not in artifact["classes"]:
+        raise ModelUnavailableError(
+            f"Classifier artifact at {MODEL_PATH} does not include both required labels. Retrain the model."
+        )
+    return artifact
 
 
 def detect_scam(transcript: str) -> dict:
+    if not isinstance(transcript, str) or not transcript.strip():
+        raise ValueError("Transcript must contain non-whitespace text.")
+
     safe_text = redact_sensitive(transcript)
+    artifact = _load_model_artifact()
+    model = artifact["model"]
+    try:
+        probabilities = model.predict_proba([safe_text])[0]
+        class_probabilities = dict(zip(artifact["classes"], probabilities, strict=True))
+        scam_probability = float(class_probabilities[SCAM_LABEL])
+    except Exception as error:
+        raise ModelInferenceError(f"Classifier inference failed: {error}") from error
+
+    predicted_label = SCAM_LABEL if scam_probability >= SCAM_THRESHOLD else "LEGITIMATE"
+    if scam_probability >= HIGH_RISK_THRESHOLD:
+        risk_level = "HIGH"
+    elif scam_probability <= LOW_RISK_THRESHOLD:
+        risk_level = "LOW"
+    else:
+        risk_level = "MEDIUM"
+
     analysis = analyze_transcript(safe_text)
-    assessment = assess_risk(analysis)
+    confidence = max(scam_probability, 1.0 - scam_probability)
+    if risk_level == "HIGH":
+        reasons = ["The trained text classifier predicts a high probability of a scam."]
+    elif risk_level == "LOW":
+        reasons = ["The trained text classifier predicts a low probability of a scam."]
+    else:
+        reasons = ["The classifier probability is near its decision boundary; treat this result as uncertain."]
 
     return {
-        "risk_level": assessment["risk_level"],
-        "confidence": assessment["confidence"],
-        "score": assessment["score"],
-        "is_scam": assessment["is_scam"],
-        "reasons": assessment["reasons"],
+        "risk_level": risk_level,
+        "confidence": round(confidence, 4),
+        "score": round(scam_probability, 4),
+        "is_scam": predicted_label == SCAM_LABEL,
+        "reasons": reasons,
         "manipulation_signals": analysis["dominant_signals"],
-        "semantic_intent": analysis["semantic_intent"],
+        "semantic_intent": {
+            "HIGH": "scam_likely",
+            "MEDIUM": "uncertain",
+            "LOW": "legitimate_likely",
+        }[risk_level],
         "redacted_transcript": safe_text,
     }

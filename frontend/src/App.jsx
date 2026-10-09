@@ -57,9 +57,14 @@ function App() {
 
   const runAnalysis = async (text) => {
     const cleanText = text.trim()
-    if (!cleanText) return
+    if (!cleanText) {
+      setAssessment(null)
+      setLiveStatus('Enter or paste a transcript before analysis.')
+      return
+    }
 
     setIsLoading(true)
+    setAssessment(null)
     setLiveStatus('Analyzing conversation for manipulation signals...')
 
     try {
@@ -74,9 +79,11 @@ function App() {
         ...previous,
       ].slice(0, 4))
       setLiveStatus(
-        result.is_scam
+        result.risk_level === 'HIGH'
           ? 'High-risk conversation detected. Warning recommended.'
-          : 'Conversation appears safe. Monitor for follow-up pressure.',
+          : result.risk_level === 'MEDIUM'
+            ? 'The result is uncertain. Review the conversation carefully.'
+            : 'Conversation appears low-risk. Monitor for follow-up pressure.',
       )
     } catch (error) {
       setLiveStatus('Analysis failed. Please retry the transcript in a moment.')
@@ -93,9 +100,11 @@ function App() {
   }
 
   const headline = assessment
-    ? assessment.is_scam
+    ? assessment.risk_level === 'HIGH'
       ? 'Scam-risk alert'
-      : 'Conversation is low-risk'
+      : assessment.risk_level === 'MEDIUM'
+        ? 'Uncertain result — review carefully'
+        : 'Conversation is low-risk'
     : 'Transcript risk review'
 
   const riskTone = assessment
@@ -162,7 +171,11 @@ function App() {
               </div>
               <textarea
                 value={transcript}
-                onChange={(event) => setTranscript(event.target.value)}
+                onChange={(event) => {
+                  setTranscript(event.target.value)
+                  setAssessment(null)
+                  setLiveStatus('Transcript changed. Analyze it to get an updated risk assessment.')
+                }}
                 className="h-48 w-full resize-none rounded-xl border border-slate-700 bg-slate-900/80 p-3 text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-cyan-500"
                 placeholder="Paste or type the caller transcript here..."
               />
@@ -220,7 +233,13 @@ function App() {
                   Action
                 </div>
                 <div className="mt-2 text-sm font-semibold text-white">
-                  {assessment ? (assessment.is_scam ? 'Warn user' : 'Follow up') : 'Awaiting input'}
+                  {assessment
+                    ? assessment.risk_level === 'HIGH'
+                      ? 'Warn user'
+                      : assessment.risk_level === 'MEDIUM'
+                        ? 'Review carefully'
+                        : 'Follow up'
+                    : 'Awaiting input'}
                 </div>
               </div>
             </div>

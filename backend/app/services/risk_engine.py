@@ -1,49 +1,67 @@
 def assess_risk(analysis: dict) -> dict:
-    weights = analysis["signal_weights"]
-    score = sum(weights.values())
-    threshold = 0.7
+    context = analysis.get("risk_context", {})
+    signals = set(analysis.get("manipulation_signals", ()))
 
-    if not analysis["manipulation_signals"]:
-        score = 0.08
-        return {
-            "risk_level": "LOW",
-            "confidence": 0.72,
-            "score": round(score, 3),
-            "is_scam": False,
-            "reasons": ["Conversation appears routine and non-coercive."],
-        }
+    credential_request = context.get("credential_request", "credential_request" in signals)
+    payment_request = context.get("payment_request", "payment_request" in signals)
+    impersonation = context.get("impersonation", "impersonation" in signals)
+    deception = context.get("deception", "deception" in signals)
+    coercion = context.get("coercion", bool(signals & {"fear", "secrecy"}))
+    coercive_pressure = context.get(
+        "coercive_pressure",
+        coercion or (
+            context.get("urgency", "urgency" in signals)
+            and (
+                credential_request
+                or (payment_request and (deception or impersonation))
+            )
+        ),
+    )
+    distress_and_urgency = context.get("distress", "distress" in signals) and context.get(
+        "urgency", "urgency" in signals
+    )
 
-    score = min(score, 1.0)
-    if score >= threshold:
+    credential_scam = credential_request and (coercive_pressure or impersonation)
+    payment_scam = payment_request and (
+        coercive_pressure or deception or impersonation or credential_request or distress_and_urgency
+    )
+    coordinated_impersonation = impersonation and coercion
+
+    if credential_scam or payment_scam:
         risk_level = "HIGH"
-        is_scam = True
-    elif score >= 0.45:
+        score = 0.9
+        reasons = []
+        if credential_request:
+            reasons.append("The caller is requesting a private credential or verification code.")
+        if payment_request:
+            reasons.append("The caller is requesting a payment or approval of a financial transaction.")
+        if impersonation:
+            reasons.append("The request is paired with a claim of trusted authority.")
+        if coercive_pressure:
+            reasons.append("The request is paired with a threat, secrecy, or coercive time pressure.")
+        if deception:
+            reasons.append("The request is paired with a deceptive promise, refund, or account-protection claim.")
+        if distress_and_urgency:
+            reasons.append("An urgent personal-emergency story is being used alongside a payment request.")
+    elif credential_request or payment_request or coordinated_impersonation:
         risk_level = "MEDIUM"
-        is_scam = True
+        score = 0.55
+        reasons = ["The conversation contains a sensitive credential or payment request without enough context to confirm a scam."]
     else:
         risk_level = "LOW"
-        is_scam = False
-
-    reasons = []
-    if "financial_request" in analysis["manipulation_signals"]:
-        reasons.append("The caller is trying to obtain a payment or verification detail.")
-    if "urgency" in analysis["manipulation_signals"]:
-        reasons.append("The caller is creating time pressure to reduce hesitation.")
-    if "fear" in analysis["manipulation_signals"]:
-        reasons.append("The caller is using fear or threats to control the victim's response.")
-    if "authority" in analysis["manipulation_signals"]:
-        reasons.append("The caller is impersonating an official or trusted authority.")
-    if "secrecy" in analysis["manipulation_signals"]:
-        reasons.append("The caller is instructing the user to keep information private or hidden.")
-    if not reasons:
-        reasons.append("The conversation contains manipulative social-engineering cues.")
-
-    confidence = round(min(0.55 + score * 0.45, 0.99), 3)
+        score = min(
+            0.08 + sum(
+                analysis.get("signal_weights", {}).get(signal, 0.0)
+                for signal in ("urgency", "authority", "fear", "secrecy", "distress")
+            ),
+            0.44,
+        )
+        reasons = ["No coercive credential request or suspicious payment combination was detected."]
 
     return {
         "risk_level": risk_level,
-        "confidence": confidence,
+        "confidence": 0.9 if risk_level == "HIGH" else 0.65 if risk_level == "MEDIUM" else 0.72,
         "score": round(score, 3),
-        "is_scam": is_scam,
+        "is_scam": risk_level in {"HIGH", "MEDIUM"},
         "reasons": reasons,
     }

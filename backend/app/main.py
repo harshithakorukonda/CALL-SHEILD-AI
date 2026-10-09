@@ -1,9 +1,13 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.schemas.scam import RiskAssessment, TranscriptRequest
-from app.services.scam_detector import detect_scam
+from app.services.scam_detector import (
+    ModelInferenceError,
+    ModelUnavailableError,
+    detect_scam,
+)
 from app.websocket.alerts import WebSocketManager
 
 app = FastAPI(title=settings.APP_NAME, version="1.0.0")
@@ -31,7 +35,10 @@ def root():
 
 @app.post("/api/analyze", response_model=RiskAssessment)
 def analyze_transcript(payload: TranscriptRequest):
-    result = detect_scam(payload.transcript)
+    try:
+        result = detect_scam(payload.transcript)
+    except (ModelUnavailableError, ModelInferenceError) as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
     return RiskAssessment(
         risk_level=result["risk_level"],
         confidence=result["confidence"],

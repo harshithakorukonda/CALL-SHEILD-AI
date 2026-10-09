@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class TranscriptRequest(BaseModel):
@@ -8,6 +8,13 @@ class TranscriptRequest(BaseModel):
     caller_name: Optional[str] = None
     session_id: Optional[str] = None
     context: Optional[str] = None
+
+    @field_validator("transcript")
+    @classmethod
+    def transcript_must_contain_non_whitespace(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("Transcript must contain non-whitespace text.")
+        return value
 
 
 class RiskAssessment(BaseModel):

@@ -1,0 +1,91 @@
+﻿id,text,label,risk_level,category,signals,source
+CS001,Your bank KYC expires today. Tell me the six-digit code or your account will be blocked.,SCAM,HIGH,bank_kyc,,synthetic_example
+CS002,I am from account verification. Share the security code sent to your phone to keep your account active.,SCAM,HIGH,bank_kyc,,synthetic_example
+CS003,Your KYC failed. Read me your OTP now to prevent suspension of online banking.,SCAM,HIGH,bank_kyc,,synthetic_example
+CS004,"To complete mandatory bank verification, tell me your PIN and one-time code.",SCAM,HIGH,bank_kyc,,synthetic_example
+CS005,Your account may be frozen in ten minutes. Stay on the call and provide the code from your SMS.,SCAM,HIGH,bank_kyc,,synthetic_example
+CS006,"To receive your refund, approve this UPI collect request and enter your UPI PIN.",SCAM,HIGH,upi_payment,,synthetic_example
+CS007,Your UPI will be disabled today. Open my link and approve the payment request to restore it.,SCAM,HIGH,upi_payment,,synthetic_example
+CS008,Scan this QR code and enter your PIN to reverse the failed payment.,SCAM,HIGH,upi_payment,,synthetic_example
+CS009,I sent a small verification payment. Approve the larger collect request to verify your account.,SCAM,HIGH,upi_payment,,synthetic_example
+CS010,Your refund cannot be processed until you share your UPI PIN while I stay on the call.,SCAM,HIGH,upi_payment,,synthetic_example
+CS011,Your parcel is on hold. Pay a redelivery fee through this link within one hour.,SCAM,HIGH,phishing_link,,synthetic_example
+CS012,Your electricity will be disconnected tonight. Open this link and enter your card details.,SCAM,HIGH,phishing_link,,synthetic_example
+CS013,You won a government benefit. Submit your bank details at this link today to claim it.,SCAM,HIGH,phishing_link,,synthetic_example
+CS014,Your tax refund is ready. Enter your banking password on this page to release the funds.,SCAM,HIGH,phishing_link,,synthetic_example
+CS015,A legal notice is waiting. Download this APK immediately to avoid arrest.,SCAM,HIGH,phishing_link,,synthetic_example
+CS016,Your phone is infected. Install this remote access app and tell me the code on screen.,SCAM,HIGH,fake_technical_support,,synthetic_example
+CS017,I am from computer support. Disable your security software and share your screen.,SCAM,HIGH,fake_technical_support,,synthetic_example
+CS018,Your banking app is compromised. Give me remote control of your device immediately.,SCAM,HIGH,fake_technical_support,,synthetic_example
+CS019,Your computer license expired. Pay our support fee with gift cards or it will be locked.,SCAM,HIGH,fake_technical_support,,synthetic_example
+CS020,A virus may delete your files. Call this number and pay for our cleanup service now.,SCAM,HIGH,fake_technical_support,,synthetic_example
+CS021,This is the police. Your identity is linked to a case; transfer money now to avoid arrest.,SCAM,HIGH,government_police,,synthetic_example
+CS022,Your identity record will be cancelled today. Send your ID number and OTP to keep it active.,SCAM,HIGH,government_police,,synthetic_example
+CS023,I am from the tax department. Pay this penalty to my personal UPI ID or officers will visit.,SCAM,HIGH,government_police,,synthetic_example
+CS024,A warrant has been issued. Do not tell your family; stay on the phone while we settle it.,SCAM,HIGH,government_police,,synthetic_example
+CS025,Your benefit will stop unless you send your bank credentials and a processing fee today.,SCAM,HIGH,government_police,,synthetic_example
+CS026,"Grandma, I am in trouble. Send money to this new UPI ID and do not tell anyone.",SCAM,HIGH,family_emergency,,synthetic_example
+CS027,I am your grandson using a friend's phone. I had an accident; transfer money now and don't call my parents.,SCAM,HIGH,family_emergency,,synthetic_example
+CS028,Your daughter has been detained. Pay bail to this account in the next ten minutes.,SCAM,HIGH,family_emergency,,synthetic_example
+CS029,I am your nephew. My phone is broken; send money to this account and keep it secret.,SCAM,HIGH,family_emergency,,synthetic_example
+CS030,A relative is in hospital. Do not verify with anyone; pay this unknown account immediately.,SCAM,HIGH,family_emergency,,synthetic_example
+CS031,We guarantee you will double your money this week. Send funds to this wallet to join.,SCAM,HIGH,investment_crypto,,synthetic_example
+CS032,Your crypto profit is ready. Pay a release tax to this private wallet before withdrawing.,SCAM,HIGH,investment_crypto,,synthetic_example
+CS033,Share your wallet recovery phrase so I can protect your coins from hackers.,SCAM,HIGH,investment_crypto,,synthetic_example
+CS034,This guaranteed trading opportunity expires today. Borrow money and transfer it now.,SCAM,HIGH,investment_crypto,,synthetic_example
+CS035,Your investment account is frozen. Send cryptocurrency to this address to unlock it.,SCAM,HIGH,investment_crypto,,synthetic_example
+CS036,You are selected for a remote job. Pay a registration fee today and send bank details.,SCAM,HIGH,job_recruitment,,synthetic_example
+CS037,We will hire you without an interview if you buy our training kit from this payment link.,SCAM,HIGH,job_recruitment,,synthetic_example
+CS038,"Send your card number, CVV, and OTP to release your first salary.",SCAM,HIGH,job_recruitment,,synthetic_example
+CS039,You are shortlisted for a government job. Pay the document verification fee to my UPI ID.,SCAM,HIGH,job_recruitment,,synthetic_example
+CS040,Deposit more money to unlock your work-from-home tasks and withdraw your earnings.,SCAM,HIGH,job_recruitment,,synthetic_example
+CS041,You won a lottery you never entered. Pay a processing charge to receive your prize.,SCAM,HIGH,lottery_prize,,synthetic_example
+CS042,Your number won a car. Send bank details and a delivery fee before midnight.,SCAM,HIGH,lottery_prize,,synthetic_example
+CS043,You have won cash. Share the OTP we sent to verify you as the winner.,SCAM,HIGH,lottery_prize,,synthetic_example
+CS044,A charity grant is reserved for you. Pay a registration fee and send your ID today.,SCAM,HIGH,lottery_prize,,synthetic_example
+CS045,We need your card CVV to deposit your prize. Keep the award confidential.,SCAM,HIGH,lottery_prize,,synthetic_example
+CS046,Your SIM will be deactivated in thirty minutes. Tell me the porting OTP to keep your number.,SCAM,HIGH,sim_swap,,synthetic_example
+CS047,I am from your mobile provider. Share the code you received to stop a SIM replacement.,SCAM,HIGH,sim_swap,,synthetic_example
+CS048,Install this network profile and provide the verification code to reactivate your SIM.,SCAM,HIGH,sim_swap,,synthetic_example
+CS049,Send your identity number and SMS code to prevent your number being transferred.,SCAM,HIGH,sim_swap,,synthetic_example
+CS050,Your mobile service ends today unless you pay this recharge fee to my personal account.,SCAM,HIGH,sim_swap,,synthetic_example
+CS051,"If you care about me, send money now. Do not tell your family or I will leave.",SCAM,HIGH,blackmail_romance,,synthetic_example
+CS052,I have private photos and will send them to your contacts unless you pay within an hour.,SCAM,HIGH,blackmail_romance,,synthetic_example
+CS053,I am stranded overseas. Send emergency funds to this account and keep it secret.,SCAM,HIGH,blackmail_romance,,synthetic_example
+CS054,Pay the fee to release my package; do not discuss our relationship with anyone.,SCAM,HIGH,blackmail_romance,,synthetic_example
+CS055,Pay me in cryptocurrency immediately or I will expose your personal information.,SCAM,HIGH,blackmail_romance,,synthetic_example
+CS056,Your instant loan is approved. Pay an advance fee to my personal account to release it.,SCAM,HIGH,loan_fee,,synthetic_example
+CS057,Send your OTP and banking password so I can deposit your loan today.,SCAM,HIGH,loan_fee,,synthetic_example
+CS058,Your credit score will be ruined unless you pay this overdue loan settlement immediately.,SCAM,HIGH,loan_fee,,synthetic_example
+CS059,Transfer a processing charge first; we guarantee a loan without checking documents.,SCAM,HIGH,loan_fee,,synthetic_example
+CS060,"To cancel the loan application, share your card details and security code with me.",SCAM,HIGH,loan_fee,,synthetic_example
+CS061,The hospital has moved your procedure to 4 PM. Please arrive thirty minutes early with your reports.,LEGITIMATE,LOW,hospital_appointment,,synthetic_example
+CS062,The doctor reviewed your reports. Please book a follow-up through the hospital reception.,LEGITIMATE,LOW,hospital_update,,synthetic_example
+CS063,This is the hospital ward. Your father is stable; please speak with the nurse at reception.,LEGITIMATE,LOW,hospital_emergency,,synthetic_example
+CS064,Your monthly account statement is available in the official banking app.,LEGITIMATE,LOW,bank_statement,,synthetic_example
+CS065,Your replacement debit card has been dispatched and should arrive in five working days.,LEGITIMATE,LOW,bank_card,,synthetic_example
+CS066,Bank staff will never ask you to tell them your PIN or OTP. Call the official number if concerned.,LEGITIMATE,LOW,bank_safety,,synthetic_example
+CS067,You requested a transfer. Enter the OTP only inside your official banking app; never tell it to anyone.,LEGITIMATE,LOW,otp_safe,,synthetic_example
+CS068,This is a reminder for your clinic appointment tomorrow at 10 AM. Bring your reports.,LEGITIMATE,LOW,appointment,,synthetic_example
+CS069,Your parcel is out for delivery. The courier will call when they reach your address; no payment is needed.,LEGITIMATE,LOW,delivery,,synthetic_example
+CS070,Your electricity bill is available on the provider's official website. Please check the due date.,LEGITIMATE,LOW,electricity,,synthetic_example
+CS071,"Hi Grandma, I reached home safely. I will visit on Sunday after my classes.",LEGITIMATE,LOW,family_checkin,,synthetic_example
+CS072,"Mom, I am at the hospital with my friend. Their family has been informed and the doctor is checking them.",LEGITIMATE,LOW,family_emergency,,synthetic_example
+CS073,The school parent meeting is on Friday at 3 PM. Please confirm with the teacher.,LEGITIMATE,LOW,school_notice,,synthetic_example
+CS074,Your application has been received. Check its status through the official department portal.,LEGITIMATE,LOW,government_service,,synthetic_example
+CS075,Your insurance policy renews next month. Review the documents and contact the official service centre.,LEGITIMATE,LOW,insurance,,synthetic_example
+CS076,Water service may be interrupted tomorrow morning due to maintenance. No payment is required.,LEGITIMATE,LOW,utility,,synthetic_example
+CS077,Our branch closes at 2 PM on Saturday for maintenance and reopens on Monday.,LEGITIMATE,LOW,bank_hours,,synthetic_example
+CS078,Your prescription is ready for pickup. Bring the prescription slip to the pharmacy.,LEGITIMATE,LOW,pharmacy,,synthetic_example
+CS079,Your train is scheduled to depart at 6:20 PM. Check the official railway app for platform updates.,LEGITIMATE,LOW,travel,,synthetic_example
+CS080,HR is confirming your interview on Tuesday at 11 AM. Bring your resume to reception.,LEGITIMATE,LOW,hr_interview,,synthetic_example
+CS081,Your returned-item refund has been initiated to the original payment method.,LEGITIMATE,LOW,refund,,synthetic_example
+CS082,Please come to the clinic early if convenient; the doctor has an earlier opening. Bring your reports.,LEGITIMATE,LOW,hospital_urgent,,synthetic_example
+CS083,Your mobile plan renews tomorrow according to your current settings. Review it in the official app.,LEGITIMATE,LOW,telecom,,synthetic_example
+CS084,We received your insurance claim documents. An agent will contact you using your policy details.,LEGITIMATE,LOW,insurance_claim,,synthetic_example
+CS085,Your parcel is in routine processing. Check the courier's official tracking page for updates.,LEGITIMATE,LOW,courier_tracking,,synthetic_example
+CS086,Could you help me with some money when convenient? Please call me back on my usual number.,LEGITIMATE,LOW,family_money,,synthetic_example
+CS087,We paused a transaction for review. Hang up and call the official number printed on your card.,LEGITIMATE,LOW,bank_safe,,synthetic_example
+CS088,Your dental appointment moved from 2 PM to 4 PM. Confirm with the clinic reception.,LEGITIMATE,LOW,appointment_change,,synthetic_example
+CS089,Will you attend the community meeting this evening? We will email the agenda.,LEGITIMATE,LOW,normal_chat,,synthetic_example
+CS090,The school trip leaves at 7 AM tomorrow. Please pack lunch and arrive at the main gate.,LEGITIMATE,LOW,school_trip,,synthetic_example
