@@ -6,6 +6,7 @@ import joblib
 from app.ml.pipeline import HIGH_RISK_THRESHOLD, LOW_RISK_THRESHOLD, SCAM_THRESHOLD
 
 from .redaction_service import redact_sensitive
+from .risk_engine import assess_risk
 from .semantic_analyzer import analyze_transcript
 
 
@@ -73,12 +74,18 @@ def detect_scam(transcript: str) -> dict:
 
     analysis = analyze_transcript(safe_text)
     confidence = max(scam_probability, 1.0 - scam_probability)
-    if risk_level == "HIGH":
-        reasons = ["The trained text classifier predicts a high probability of a scam."]
-    elif risk_level == "LOW":
-        reasons = ["The trained text classifier predicts a low probability of a scam."]
-    else:
-        reasons = ["The classifier probability is near its decision boundary; treat this result as uncertain."]
+    
+    rule_assessment = assess_risk(analysis)
+    
+    # Combine ML prediction with dynamic semantic reasons
+    reasons = list(rule_assessment.get("reasons", []))
+    ml_summary = f"ML model scam probability: {scam_probability * 100:.1f}% ({predicted_label})"
+    if ml_summary not in reasons:
+        reasons.insert(0, ml_summary)
+
+    intent = analysis.get("semantic_intent", "benign")
+    if risk_level == "HIGH" and intent == "benign":
+        intent = "scam_likely"
 
     return {
         "risk_level": risk_level,
@@ -86,11 +93,7 @@ def detect_scam(transcript: str) -> dict:
         "score": round(scam_probability, 4),
         "is_scam": predicted_label == SCAM_LABEL,
         "reasons": reasons,
-        "manipulation_signals": analysis["dominant_signals"],
-        "semantic_intent": {
-            "HIGH": "scam_likely",
-            "MEDIUM": "uncertain",
-            "LOW": "legitimate_likely",
-        }[risk_level],
+        "manipulation_signals": analysis.get("manipulation_signals", analysis.get("dominant_signals", [])),
+        "semantic_intent": intent,
         "redacted_transcript": safe_text,
     }

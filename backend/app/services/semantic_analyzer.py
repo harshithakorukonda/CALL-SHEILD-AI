@@ -73,9 +73,10 @@ SIGNAL_PATTERNS = {
 CREDENTIAL_PATTERNS = (
     r"\b(?:tell|share|read|provide|send|give|reveal|disclose|confirm|text|forward|"
     r"enter|type|key\s+in|submit)\b.{0,60}\b(?:otp|one[- ]time\s+(?:password|code)|"
-    r"security\s+code|verification\s+code|six[- ]digit\s+code|code\s+from\s+"
+    r"security\s+code|verification\s+code|six[- ]digit\s+code|sms\s+code|code\s+from\s+"
     r"(?:your\s+)?(?:sms|text|phone)|code\s+you\s+received|pin|password|cvv|"
-    r"recovery\s+phrase|code\s+on\s+screen)\b",
+    r"recovery\s+phrase|code\s+on\s+screen|identity\s+number|screen)\b",
+    r"\b(?:disable\s+(?:your\s+)?security|share\s+your\s+screen|give\s+remote\s+control)\b",
 )
 PAYMENT_REQUEST_PATTERNS = (
     r"\b(?:pay|send|transfer|deposit|wire|remit|purchase|buy|approve|scan)\b.{0,70}\b"
@@ -89,9 +90,9 @@ PAYMENT_REQUEST_PATTERNS = (
 THREAT_PATTERNS = (
     r"\b(?:will|may|could|unless|or)\b.{0,45}\b(?:block(?:ed)?|suspend(?:ed)?|"
     r"freeze|frozen|deactivat(?:e|ed)|disconnect(?:ed)?|arrest|detain(?:ed)?|"
-    r"penalty|legal action|expose|ruin(?:ed)?|delete)\b",
+    r"penalty|legal action|expose|ruin(?:ed)?|delete|transferred)\b",
     r"\b(?:blocked|suspended|frozen|deactivated|disconnected|detained|arrested)\b",
-    r"\b(?:unless you|or your account)\b",
+    r"\b(?:unless you|or your account|prevent your number)\b",
 )
 IMPERSONATION_PATTERNS = (
     r"\b(?:i am|this is|calling from|speaking from)\b.{0,45}\b(?:your\s+)?"
@@ -99,14 +100,16 @@ IMPERSONATION_PATTERNS = (
     r"mobile provider|official|inspector)\b",
     r"\b(?:bank|government|police|tax|account verification|kyc|computer support|"
     r"mobile provider)\s+(?:staff|agent|officer|department|team)\b",
+    r"\bfrom\s+computer\s+support\b",
 )
 DECEPTION_PATTERNS = (
     r"\b(?:account|kyc)\s+(?:verification|protection|security)\b",
     r"\b(?:refund|reverse(?:d|sal)?|release|unlock|recover)\b",
     r"\b(?:guarantee(?:d)?|double your money|won a|you won|prize|lottery)\b",
     r"\b(?:hired|job offer|work[- ]from[- ]home|recruit(?:ment)?)\b",
-    r"\b(?:remote access|gift cards?|private wallet|recovery phrase)\b",
+    r"\b(?:remote access|gift cards?|private wallet|recovery phrase|security software|screen)\b",
     r"\b(?:i am your|this is your)\s+(?:grandson|granddaughter|son|daughter|relative)\b",
+    r"\bnumber\s+being\s+transferred\b",
 )
 
 RISK_WEIGHTS = {
