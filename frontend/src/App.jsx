@@ -5,12 +5,12 @@ import {
   BadgeCheck,
   BellRing,
   Gauge,
-  Mic,
   PhoneCall,
   ShieldCheck,
   Sparkles,
 } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import MicTranscript from './components/MicTranscript'
 import { analyzeTranscript } from './services/api'
 
 const scenarioLibrary = [
@@ -92,27 +92,11 @@ function App() {
     await runAnalysis(selected.transcript)
   }
 
-  const startRecording = async () => {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setLiveStatus('This browser cannot capture microphone audio. Paste a transcript for analysis instead.')
-      return
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      setLiveStatus('Microphone active. Capture will be processed as a controlled live-call simulation.')
-      stream.getTracks().forEach((track) => track.stop())
-    } catch (error) {
-      setLiveStatus('Microphone permission was not granted. Use a sample script or the transcript editor.')
-      console.error(error)
-    }
-  }
-
   const headline = assessment
     ? assessment.is_scam
       ? 'Scam-risk alert'
       : 'Conversation is low-risk'
-    : 'Live call protection'
+    : 'Transcript risk review'
 
   const riskTone = assessment
     ? assessment.risk_level === 'HIGH'
@@ -137,7 +121,7 @@ function App() {
           </div>
           <div className="flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-200">
             <BadgeCheck size={16} />
-            Real-time risk monitoring
+            Browser-based demo
           </div>
         </header>
 
@@ -150,7 +134,7 @@ function App() {
               </div>
               <div className="flex items-center gap-2 rounded-full bg-cyan-500/10 px-3 py-2 text-sm text-cyan-200">
                 <PhoneCall size={16} />
-                Live session
+                Demo session
               </div>
             </div>
 
@@ -162,21 +146,14 @@ function App() {
                 Start demo call
               </button>
               <button
-                onClick={startRecording}
-                className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 font-medium text-slate-100 transition hover:border-cyan-500"
-              >
-                <span className="inline-flex items-center gap-2">
-                  <Mic size={16} />
-                  Capture mic
-                </span>
-              </button>
-              <button
                 onClick={() => runAnalysis(transcript)}
                 className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 font-medium text-amber-100 transition hover:bg-amber-500/20"
               >
                 Analyze transcript
               </button>
             </div>
+
+            <MicTranscript onUseTranscript={setTranscript} />
 
             <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
               <div className="mb-3 flex items-center gap-2 text-sm text-slate-300">
